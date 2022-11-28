@@ -1,5 +1,5 @@
 def z_function():
-  print("Hello from a function")
+  print("changed")
 
 def n_function():
   print("Hello from a function")
