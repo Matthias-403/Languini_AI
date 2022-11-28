@@ -8,4 +8,4 @@ def j_function():
   print("Hello from a function")
 
 def m_function():
-  print("Hello from a function")
+  print("changed")
