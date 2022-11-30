@@ -29,7 +29,7 @@ def api_call(words: list = []):
     # gets all the pronunciations from a word.
     # https://api.forvo.com/documentation/word-pronunciations/
     action = 'action/word-pronunciations'
-    country = 'country/gbr'  # https://en.wikipedia.org/wiki/ISO_3166-1
+    country = 'country/gbr'   # https://en.wikipedia.org/wiki/ISO_3166-1
     order = 'order/rate-desc' # date-desc, date-asc, rate-desc, rate-asc
     limit = 'limit/50'
     
@@ -37,8 +37,6 @@ def api_call(words: list = []):
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         url = f'{forvo_api_url}/{key}/{format}/{action}/word/{word}/{language}/{country}/{order}/{limit}'
         json_file = f'forvo_api/json/{timestamp}-{word}.json'
-        blob = bucket.blob(json_file)
         response = requests.get(url, timeout=10).json()
-        return response
-        with blob.open("w") as f:
-               f.write(response)
+        with open(json_file, 'w') as f:
+            json.dump(response, f)
