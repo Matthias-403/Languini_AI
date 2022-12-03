@@ -66,7 +66,7 @@ def similarity_3(sample_1, sample_2, sample_3, embedding):
 #local paths
 #embedding1 = tf.keras.models.load_model('forvo_1.h5')
 #cloud paths
-#embedding = gb.load_files(['trained_model/test.h5'])
+embedding = tf.keras.models.load_model( 'gs://languini-ai-bucket/trained_model/test.h5' )
 
 #similarity between 2 images (im2,im3)  relative to the anchor (im1)
 #sim = similarity_3(im1,im2,im3, embedding)
