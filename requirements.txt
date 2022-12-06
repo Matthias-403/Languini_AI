@@ -5,17 +5,26 @@ ipdb
 jupyterlab
 numpy
 pandas
-matplotlib
+matplotlib.pyplot
 seaborn
 scikit-learn
 ipykernel
 nbresult
 pygeohash
 yapf
-python-dotenv
+audio-recorder-streamlit
+requests
+pydub
+python-multipart
 
 librosa==0.9.2
-tensorflow==2.10.0
+#tensorflow==2.10.0
 
 google-cloud-storage==2.4.0
-google-cloud-bigquery<3.0.0
+#google-cloud-bigquery<3.0.0
+
+# API
+fastapi
+pytz
+uvicorn
+pydantic
