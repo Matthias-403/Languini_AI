@@ -1,6 +1,5 @@
 from tensorflow.keras.applications import resnet
 from tensorflow.keras import metrics
-# import gcp_bucket as gb
 from google.cloud import storage
 import os
 import tensorflow as tf
@@ -61,6 +60,9 @@ def similarity_3(sample_1, sample_2, sample_3, embedding):
 
 #CSV Functions
 def get_df_cloud(file_path:str)->object:
+    '''
+    gets csv file from the bucket and returns it as a pandas dataframe
+    '''
     return pd.read_csv(file_path)
 
 def user_word(df:object, user_name:str, word:str)-> object:
@@ -142,37 +144,52 @@ def new_row(df:object, user:str, word:str,score:str=0, upload:bool=False)->objec
         upload_csv(df2)
         return df2
 
-# def
-#example
-#new_row(get_df_cloud(filepath), 'User_2', 'bang',0.9992,upload=True)
-
-#TODO func that takes in the path for the image and the word and:
-# 1. loads appropriate image based on the target word file path
-# 2. does the comparison.
-# 3. puts stuff into the csv and then gives back the list
 
 def mff(sg_filepath: str,user: str, word: str, embedding:object)->dict:
+    '''
+    takes in the local path of the spectrogram of users input as the path to a
+    librosa melspectrogram jpg (sg_filepath), the user name to be used (user),
+    the word being tested (word, used to import the path to the cloud .jpg of
+    the spectrogram for that word, need a locally saved .json with paths)
+    and the loaded model for the embedding of the images (embedding, must be a
+    <class 'keras.engine.functional.Functional'> object), the function updates
+    the csv with user performance data and returns a dict of information for
+    the streamlit site
+    '''
+
+    #local path to the file, for optimal speed. either saved locally on the VM
+    #or burned on the container image
     f = open('/home/mp/code/Matthias-403/project-local/notebooks/words_paths.json')
     dict_load = json.load(f)
+    #im1 is the image from user we test
     im1 = preprocess_image(sg_filepath)
     word_path = dict_load.get(word,0)
     if word_path==0:
         return 0
+    #im2 is th anchor
     im2 = preprocess_image(f"gs://languini-ai-bucket/{word_path}")
+    #cosine similarity fo the two words
     score=similarity_2(im1,im2,embedding)
+    #updating the cscv
     csv_filepath='gs://languini-ai-bucket/user_scores/users_scores2.csv'
     df = get_df_cloud(csv_filepath)
     df = new_row(df, user, word, score, upload=True)
+    #summary of scores, scores are a list of all scores for the word
+    #dates are a list of all attempts per given word
     scores, dates = get_scores(df, user, word, get_dates=True)
     return {'user': user, 'word': word, 'scores':scores, 'dates':dates}
 
 
+##---------------------------------------------------------------------
+# EXAMPLES
+##---------------------------------------------------------------------
 
+# cloud model
 # embedding1 = load_model('gs://languini-ai-bucket/trained_model/2212042016_MP.h5')
-embedding2 = load_model("/home/mp/code/Matthias-403/project-local/models/forvo_2.h5")
-a =mff('/home/mp/code/Matthias-403/project-local/my_voice_recordings/sg/cat_pos.jpg',
-       'User_1',
-       'cat',
-       embedding2)
-print(a)
-print(type(embedding2))
+
+# local model
+# embedding2 = load_model("/home/mp/code/Matthias-403/project-local/models/forvo_2.h5")
+
+# calling the mff()
+# a =mff('/home/mp/code/Matthias-403/project-local/my_voice_recordings/sg/cat_pos.jpg',
+        # 'User_1','cat',embedding2)
