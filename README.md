@@ -16,7 +16,7 @@ The basic idea is very simple:
 4. The model embedes both images (as TensorFlow vectors)and compares them through cosine similarity
 5. The resulting score is weighted against previous attemps to show progress
 
-![alt text](https://github.com/Matthias-403/Languini_AI/blob/master/GH%20diagram(2).png)
+![alt text](https://github.com/Matthias-403/Languini_AI/blob/master/GH%20diagram(3).png)
 
 ### Reusing Languini AI
 #### Training 
