@@ -16,11 +16,12 @@ The basic idea is very simple:
 4. The model embedes both images (as TensorFlow vectors)and compares them through cosine similarity
 5. The resulting score is weighted against previous attemps to show progress
 
+![alt text](https://github.com/Matthias-403/Languini_AI/blob/master/GH%20diagram.png)
 
 ### Reusing Languini AI
 #### Training 
 Create a directory of files with audiorecordings of sounds in the target language. You can generate a model using the languiniai/train_model.py 
-#### Compare
+#### Comparing
 You can use our train model and languiniai/compare.py to compare two different melspectrograms.
 #### Data Pre-processing
 Within the notebooks branch there is a directory with jupyter notebooks that walk through it all.
